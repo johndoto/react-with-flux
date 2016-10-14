@@ -2,7 +2,7 @@
 
 var React = require("react");
 
-var Home = React.createClass({
+var HomePage = React.createClass({
     render: function() {
         return (
             <div className="container">
@@ -15,4 +15,4 @@ var Home = React.createClass({
     }
 });
 
-module.exports = Home;
+module.exports = HomePage;
