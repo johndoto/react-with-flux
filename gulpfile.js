@@ -15,15 +15,23 @@ var config = {
     port: 3000,
     devBaseUrl: "http://localhost",
     paths: {
-        html:       "./src/*.html",
-        appJs:      "./src/main.js",
-        watchJs:    "./src/**/*.js",
-        images:     "./src/images/*",
-        css: [
+        html:     "./src/*.html",
+        appJs:    "./src/main.js",
+        watchJs:  "./src/**/*.js",
+        vendorCss: [
             "node_modules/bootstrap/dist/css/bootstrap.min.css",
-            "node_modules/bootstrap/dist/css/bootstrap-theme.min.css"
+            "node_modules/bootstrap/dist/css/bootstrap-theme.min.css",
+            "node_modules/toastr/toastr.css"
         ],
-        dist:   "./dist"
+        fonts: [
+            "node_modules/bootstrap/dist/fonts/*"
+        ],
+        appCss: [
+            "./src/css/app.css"
+        ],
+        watchCss: "./src/**/*.css",
+        images:   "./src/images/*",
+        dist:     "./dist"
     }
 };
 
@@ -60,6 +68,7 @@ gulp.task("vendorJs", function() {
         .require("lodash")
         .require("jquery")
         .require("bootstrap")
+        .require("toastr")
         .bundle()
         .on("error", console.error.bind(console))
         .pipe(source("vendor.js"))
@@ -75,6 +84,7 @@ gulp.task("appJs", function() {
         .external("lodash")
         .external("jquery")
         .external("bootstrap")
+        .external("toastr")
         .transform(reactify)
         .bundle()
         .on("error", console.error.bind(console))
@@ -83,10 +93,24 @@ gulp.task("appJs", function() {
         .pipe(connect.reload());
 });
 
-// concat and move CSS from modules to dist
-gulp.task("css", function() {
-    gulp.src(config.paths.css)
+// concat and move vendor CSS from modules to dist
+gulp.task("vendorCss", function() {
+    gulp.src(config.paths.vendorCss)
         .pipe(concat("vendor.css"))
+        .pipe(gulp.dest(config.paths.dist + "/css"));
+});
+
+// move vendor fonts from modules to dist
+gulp.task("fonts", function() {
+    gulp.src(config.paths.fonts)
+        .pipe(gulp.dest(config.paths.dist + "/fonts"))
+        .pipe(connect.reload());
+});
+
+// concat and move app CSS from src to dist
+gulp.task("appCss", function() {
+    gulp.src(config.paths.appCss)
+        .pipe(concat("app.css"))
         .pipe(gulp.dest(config.paths.dist + "/css"));
 });
 
@@ -112,9 +136,10 @@ gulp.task("lint", function() {
 gulp.task("watch", function() {
     gulp.watch(config.paths.html, ["html"]);
     gulp.watch(config.paths.watchJs, ["appJs", "lint"]);
+    gulp.watch(config.paths.watchCss, ["appCss"]);
     gulp.watch(config.paths.images, ["images"]);
 });
 
 // set what should happen when "gulp" command is run in console
-gulp.task("default", ["html", "vendorJs", "appJs", "css", "images", "lint", "open", "watch"]);
+gulp.task("default", ["html", "vendorJs", "appJs", "vendorCss", "fonts", "appCss", "images", "lint", "open", "watch"]);
 
