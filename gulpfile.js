@@ -65,6 +65,7 @@ gulp.task("vendorJs", function() {
         .require("react")
         .require("react-router")
         .require("flux")
+        .require("object-assign")
         .require("lodash")
         .require("jquery")
         .require("bootstrap")
@@ -81,6 +82,7 @@ gulp.task("appJs", function() {
         .external("react")
         .external("react-router")
         .external("flux")
+        .external("object-assign")
         .external("lodash")
         .external("jquery")
         .external("bootstrap")
@@ -142,4 +144,3 @@ gulp.task("watch", function() {
 
 // set what should happen when "gulp" command is run in console
 gulp.task("default", ["html", "vendorJs", "appJs", "vendorCss", "fonts", "appCss", "images", "lint", "open", "watch"]);
-

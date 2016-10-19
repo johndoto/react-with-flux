@@ -4,7 +4,8 @@ var React =         require("react");
 var Router =        require("react-router");
 var Toastr =        require("toastr");
 var AuthorForm =    require("./authorForm");
-var AuthorApi =     require("../../api/authorApi");
+var AuthorActions = require("../../actions/authorActions");
+var AuthorStore =   require("../../stores/authorStore");
 
 var EditAuthorPage = React.createClass({
     mixins: [
@@ -28,7 +29,7 @@ var EditAuthorPage = React.createClass({
         // get the id from the URL path "/author/:id"
         var authorId = this.props.params.id;
         if (authorId) {
-            this.setState({ author: AuthorApi.getAuthorById(authorId) });
+            this.setState({ author: AuthorStore.getAuthorById(authorId) });
         }
     },
     setAuthorState: function(event) {
@@ -57,12 +58,23 @@ var EditAuthorPage = React.createClass({
     saveAuthor: function(event) {
         event.preventDefault();
         event.stopPropagation();
+
         if (!this.authorFormIsValid()) {
+            // invalid form
             return;
         }
-        AuthorApi.saveAuthor(this.state.author);
+
+        if (this.state.author.id) {
+            // author exists - update
+            AuthorActions.updateAuthor(this.state.author);
+            Toastr.success("Author updated.");
+        } else {
+            // author does not exist - create
+            AuthorActions.createAuthor(this.state.author);
+            Toastr.success("Author created.");
+        }
+
         this.setState({ dirty: false });
-        Toastr.success("Author saved.");
         this.transitionTo("authors");
     },
     render: function() {
@@ -86,4 +98,3 @@ var EditAuthorPage = React.createClass({
 });
 
 module.exports = EditAuthorPage;
-

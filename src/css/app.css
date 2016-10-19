@@ -17,3 +17,13 @@ h1, .h1 {
     display: block;
 }
 
+form .btn {
+    margin-right: 0.5em;
+}
+
+.table>thead>tr>td,
+.table>thead>tr>th,
+.table>tbody>tr>td,
+.table>tbody>tr>th {
+    vertical-align: middle;
+}

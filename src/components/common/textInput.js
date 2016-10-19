@@ -8,6 +8,7 @@ var TextInput = React.createClass({
         label: React.PropTypes.string.isRequired,
         onChange: React.PropTypes.func.isRequired,
         placeholder: React.PropTypes.string,
+        autoFocus: React.PropTypes.bool,
         value: React.PropTypes.string,
         error: React.PropTypes.string
     },
@@ -24,9 +25,10 @@ var TextInput = React.createClass({
                         className="form-control"
                         name={this.props.name}
                         ref={this.props.name}
+                        onChange={this.props.onChange}
                         placeholder={this.props.placeholder}
-                        value={this.props.value}
-                        onChange={this.props.onChange} />
+                        autoFocus={this.props.autoFocus}
+                        value={this.props.value} />
                 </div>
                 <div className="alert alert-danger" role="alert">
                     <span className="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>

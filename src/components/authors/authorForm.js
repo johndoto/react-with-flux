@@ -18,6 +18,7 @@ var AuthorForm = React.createClass({
                     name="firstName"
                     label="First Name"
                     placeholder="First Name"
+                    autoFocus={true}
                     value={this.props.author.firstName}
                     error={this.props.errors.firstName}
                     onChange={this.props.onChange} />
